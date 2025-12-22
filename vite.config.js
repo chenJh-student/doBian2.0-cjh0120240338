@@ -13,5 +13,6 @@ export default defineConfig({
                 secure: false
             }
         }
-    }
+    },
+      base: '/DoBian-movie_cjh0120240338/'
 })
