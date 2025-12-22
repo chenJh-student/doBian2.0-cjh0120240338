@@ -10,24 +10,22 @@ export default defineConfig({
         {
             name: 'copy-static-files',
             closeBundle() {
-                // 确保 dist 目录存在
-                if (!existsSync('dist')) {
-                    mkdirSync('dist')
-                }
-                
-                // 复制 movie-detail.html
+                // 复制根目录的 HTML 文件到构建输出
                 copyFileSync('movie-detail.html', 'dist/movie-detail.html')
-                
-                // 复制 user_info.html
                 copyFileSync('user_info.html', 'dist/user_info.html')
+                copyFileSync('index.html', 'dist/index.html')
                 
                 console.log('Static files copied to dist!')
             }
         }
     ],
+    build: {
+        outDir: 'dist',
+        assetsDir: 'assets'
+    },
     server: {
         port: 3000
     },
-    // GitHub Pages 配置 - 根据实际的Pages设置调整
-    base: process.env.NODE_ENV === 'production' ? '/' : '/'
+    // GitHub Pages 配置 - 根路径部署
+    base: '/'
 })
