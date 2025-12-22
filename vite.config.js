@@ -28,6 +28,6 @@ export default defineConfig({
     server: {
         port: 3000
     },
-    // 更新为正确的GitHub仓库名 - 部署时启用
-    base: process.env.NODE_ENV === 'production' ? '/仿制豆瓣电影网/' : '/'
+    // GitHub Pages 配置 - 根据实际的Pages设置调整
+    base: process.env.NODE_ENV === 'production' ? '/' : '/'
 })

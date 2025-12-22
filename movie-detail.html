@@ -418,18 +418,9 @@
 <script>
     // 基础路径工具
     function getBasePath() {
-        // 检查是否在生产环境且在GitHub Pages上
+        // GitHub Pages 通常部署到根路径
         if (window.location.hostname.includes('github.io')) {
-            // 从URL中提取基础路径
-            const pathParts = window.location.pathname.split('/');
-            // 找到仓库名部分 - GitHub Pages通常格式为 /username/repo-name/
-            if (pathParts.length > 2) {
-                // 检查是否是仓库名（假设仓库名不包含点）
-                if (pathParts[2].includes('.')) {
-                    return `/${pathParts[1]}/`;
-                }
-                return `/${pathParts[1]}/${pathParts[2]}/`;
-            }
+            return '/'; // GitHub Pages 根路径
         }
         // 本地开发环境
         return '/';
