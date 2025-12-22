@@ -17,7 +17,7 @@
 <script>
     async function testCSV() {
         try {
-            const response = await fetch('/movie_info.csv');
+            const response = await fetch('/data/movie_info.csv');
             const csvText = await response.text();
             const lines = csvText.split('\n');
             document.getElementById('csv-output').innerHTML = `

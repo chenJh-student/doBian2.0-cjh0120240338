@@ -61,13 +61,50 @@ export const splitCSVLines = (text) => {
     return lines;
 };
 
-export const loadDataFromCSV = async(filePath) => {
-    try {
-        const response = await fetch(filePath);
-        const text = await response.text();
-        return text;
-    } catch (error) {
-        console.error(`加载数据失败: ${error.message}`);
-        throw error;
-    }
-};
+import Papa from 'papaparse';
+
+// 修正CSV文件路径
+export async function loadMovieData() {
+  try {
+    const response = await fetch('/data/movie_info.csv');
+    const csvText = await response.text();
+    
+    return Papa.parse(csvText, {
+      header: true,
+      skipEmptyLines: true
+    }).data;
+  } catch (error) {
+    console.error('加载电影数据失败:', error);
+    return [];
+  }
+}
+
+export async function loadComments() {
+  try {
+    const response = await fetch('/data/comment.csv');
+    const csvText = await response.text();
+    
+    return Papa.parse(csvText, {
+      header: true,
+      skipEmptyLines: true
+    }).data;
+  } catch (error) {
+    console.error('加载评论数据失败:', error);
+    return [];
+  }
+}
+
+export async function loadUsers() {
+  try {
+    const response = await fetch('/data/user.csv');
+    const csvText = await response.text();
+    
+    return Papa.parse(csvText, {
+      header: true,
+      skipEmptyLines: true
+    }).data;
+  } catch (error) {
+    console.error('加载用户数据失败:', error);
+    return [];
+  }
+}

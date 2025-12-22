@@ -350,9 +350,9 @@ NEW_FILE_CODE
                     try {
                         // 并行加载用户、电影和评论数据
                         const [usersResponse, moviesResponse, commentsResponse] = await Promise.all([
-                            fetch('/backend/data/user.csv'),
-                            fetch('/movie_info.csv'),
-                            fetch('/backend/data/comment.csv')
+                            fetch('/data/user.csv'),
+                            fetch('/data/movie_info.csv'),
+                            fetch('/data/comment.csv')
                         ]);
 
                         const usersText = await usersResponse.text();

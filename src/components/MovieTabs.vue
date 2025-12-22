@@ -161,7 +161,7 @@ export default {
     
     async loadMoviesFromCsv() {
       try {
-        const response = await fetch('/movie_info.csv');
+        const response = await fetch('/data/movie_info.csv');
         const csvText = await response.text();
         
         const parsed = Papa.parse(csvText, {

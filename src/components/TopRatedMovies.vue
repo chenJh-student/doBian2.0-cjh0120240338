@@ -49,11 +49,11 @@ export default {
       loading: true,
       // 广告相关数据
       ads: [
-        '/backend/data/diwu/2.jpg',
-        '/backend/data/diwu/3.jpg',
-        '/backend/data/diwu/4.jpg',
-        '/backend/data/diwu/5.jpg',
-        '/backend/data/diwu/d619f937-84fa-44ed-8296-6322e5166232.jpg'
+        '/data/diwu/2.jpg',
+        '/data/diwu/3.jpg',
+        '/data/diwu/4.jpg',
+        '/data/diwu/5.jpg',
+        '/data/diwu/d619f937-84fa-44ed-8296-6322e5166232.jpg'
       ],
       currentAdIndex: 0,
       adLink: 'https://www.ldoooo.com/ldq-template-delivery/pc/landing-page/?msclkid=d8c35a05ca2f1db06066334d3eae761e#/landing/13715',
@@ -85,7 +85,7 @@ export default {
   methods: {
     async loadMoviesFromCsv() {
       try {
-        const response = await fetch('/movie_info.csv');
+        const response = await fetch('/data/movie_info.csv');
         const csvText = await response.text();
         
         const parsed = Papa.parse(csvText, {

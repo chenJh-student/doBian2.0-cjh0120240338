@@ -7,6 +7,6 @@ export default defineConfig({
     server: {
         port: 3000
     },
-    // 更新为新的仓库名
-    base: '/doBian2.0-cjh0120240338/'
+    // 更新为新的仓库名 - 部署时启用，开发时注释掉
+    base: process.env.NODE_ENV === 'production' ? '/doBian2.0-cjh0120240338/' : '/'
 })

@@ -502,10 +502,10 @@
                 try {
                     // 并行加载电影、评论和用户数据
                     const [movieResponse, commentsResponse, usersResponse, allMoviesResponse] = await Promise.all([
-                        fetch('/movie_info.csv'),
-                        fetch('/backend/data/comment.csv'),
-                        fetch('/backend/data/user.csv'),
-                        fetch('/movie_info.csv') // 再次获取所有电影数据用于推荐
+                        fetch('/data/movie_info.csv'),
+                        fetch('/data/comment.csv'),
+                        fetch('/data/user.csv'),
+                        fetch('/data/movie_info.csv') // 再次获取所有电影数据用于推荐
                     ]);
 
                     const movieText = await movieResponse.text();

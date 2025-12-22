@@ -82,7 +82,7 @@ export default {
       
       try {
         // 获取用户数据
-        const response = await fetch('/backend/data/user.csv');
+        const response = await fetch('/data/user.csv');
         const usersText = await response.text();
         
         // 解析用户数据
@@ -119,7 +119,7 @@ export default {
       if (currentUserId) {
         try {
           // 获取用户数据
-          const response = await fetch('/backend/data/user.csv');
+          const response = await fetch('/data/user.csv');
           const usersText = await response.text();
           
           // 解析用户数据
