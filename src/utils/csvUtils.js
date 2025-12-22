@@ -1,4 +1,6 @@
 // src/utils/csvUtils.js
+import { BASE_PATH } from './basePath.js';
+
 export const parseCSVLine = (line) => {
     const result = [];
     let current = '';
@@ -66,7 +68,7 @@ import Papa from 'papaparse';
 // 修正CSV文件路径
 export async function loadMovieData() {
   try {
-    const response = await fetch('/data/movie_info.csv');
+    const response = await fetch(`${BASE_PATH}data/movie_info.csv`);
     const csvText = await response.text();
     
     return Papa.parse(csvText, {
@@ -81,7 +83,7 @@ export async function loadMovieData() {
 
 export async function loadComments() {
   try {
-    const response = await fetch('/data/comment.csv');
+    const response = await fetch(`${BASE_PATH}data/comment.csv`);
     const csvText = await response.text();
     
     return Papa.parse(csvText, {
@@ -96,7 +98,7 @@ export async function loadComments() {
 
 export async function loadUsers() {
   try {
-    const response = await fetch('/data/user.csv');
+    const response = await fetch(`${BASE_PATH}data/user.csv`);
     const csvText = await response.text();
     
     return Papa.parse(csvText, {

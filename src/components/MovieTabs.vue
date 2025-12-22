@@ -126,6 +126,7 @@
 
 <script>
 import Papa from 'papaparse';
+import { BASE_PATH } from '../utils/basePath.js';
 
 export default {
   name: 'MovieTabs',
@@ -161,7 +162,7 @@ export default {
     
     async loadMoviesFromCsv() {
       try {
-        const response = await fetch('/data/movie_info.csv');
+        const response = await fetch(`${BASE_PATH}data/movie_info.csv`);
         const csvText = await response.text();
         
         const parsed = Papa.parse(csvText, {
@@ -249,13 +250,13 @@ export default {
         imagePath = imagePath.replace(/(^["'])|(["']$)/g, '');
         // 确保路径正确
         if (imagePath.startsWith('img/')) {
-          return `/${imagePath}`;
+          return `${BASE_PATH}${imagePath}`;
         } else if (!imagePath.startsWith('/')) {
-          return `/img/${imagePath}`;
+          return `${BASE_PATH}img/${imagePath}`;
         }
         return imagePath;
       }
-      return '/img/default_movie.jpg';
+      return `${BASE_PATH}img/default_movie.jpg`;
     },
     
     handleImageError(movie) {

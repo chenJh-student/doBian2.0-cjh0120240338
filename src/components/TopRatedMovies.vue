@@ -40,6 +40,7 @@
 
 <script>
 import Papa from 'papaparse';
+import { BASE_PATH } from '../utils/basePath.js';
 
 export default {
   name: 'TopRatedMovies',
@@ -48,13 +49,7 @@ export default {
       movies: [],
       loading: true,
       // 广告相关数据
-      ads: [
-        '/data/diwu/2.jpg',
-        '/data/diwu/3.jpg',
-        '/data/diwu/4.jpg',
-        '/data/diwu/5.jpg',
-        '/data/diwu/d619f937-84fa-44ed-8296-6322e5166232.jpg'
-      ],
+      ads: [],
       currentAdIndex: 0,
       adLink: 'https://www.ldoooo.com/ldq-template-delivery/pc/landing-page/?msclkid=d8c35a05ca2f1db06066334d3eae761e#/landing/13715',
       adInterval: null
@@ -71,8 +66,10 @@ export default {
       return this.ads[this.currentAdIndex];
     }
   },
-  mounted() {
+    mounted() {
     this.loadMoviesFromCsv();
+    // 初始化广告路径
+    this.initAds();
     // 启动广告轮播
     this.startAdCarousel();
   },
@@ -85,7 +82,7 @@ export default {
   methods: {
     async loadMoviesFromCsv() {
       try {
-        const response = await fetch('/data/movie_info.csv');
+        const response = await fetch(`${BASE_PATH}data/movie_info.csv`);
         const csvText = await response.text();
         
         const parsed = Papa.parse(csvText, {
@@ -139,6 +136,16 @@ export default {
         clearInterval(this.adInterval);
       }
       this.startAdCarousel();
+    },
+
+    initAds() {
+      this.ads = [
+        `${BASE_PATH}data/diwu/2.jpg`,
+        `${BASE_PATH}data/diwu/3.jpg`,
+        `${BASE_PATH}data/diwu/4.jpg`,
+        `${BASE_PATH}data/diwu/5.jpg`,
+        `${BASE_PATH}data/diwu/d619f937-84fa-44ed-8296-6322e5166232.jpg`
+      ];
     }
   }
 }
