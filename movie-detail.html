@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电影详情 - 豆瓣电影</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f0f3f5;
+        }
+        
+        #app {
+            min-height: 100vh;
+        }
+        
+        .movie-detail {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+        
+        .poster-section {}
+        
+        .movie-poster {
+            width: 100%;
+            border-radius: 4px;
+        }
+        
+        .info-section {
+            grid-column: 2;
+        }
+        
+        .movie-title {
+            font-size: 28px;
+            margin: 0 0 20px 0;
+            color: #333;
+        }
+        
+        .rating {
+            font-size: 20px;
+            color: #f44336;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .basic-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .info-item {
+            margin-bottom: 10px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #666;
+            margin-right: 10px;
+        }
+        
+        .plot-section {
+            margin-top: 30px;
+            grid-column: 1 / -1;
+        }
+        
+        .plot-section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .plot-text {
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .back-button-container {
+            margin-top: 30px;
+            grid-column: 1 / -1;
+        }
+        
+        .back-button {
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .back-button:hover {
+            background-color: #d32f2f;
+        }
+        /* 评论区域样式 */
+        
+        .comments-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            grid-column: 1 / -1;
+        }
+        /* 评论区域样式 */
+        /* 评论区域样式 */
+        
+        .comments-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            grid-column: 1 / -1;
+            /* 让评论区域横跨整个宽度 */
+        }
+        
+        .comments-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .comment-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .comment-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .comment-item:last-child {
+            border-bottom: none;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .comment-user {
+            font-weight: bold;
+            color: #37a;
+        }
+        
+        .comment-time {
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .comment-rating {
+            color: #f44336;
+            font-weight: bold;
+        }
+        
+        .comment-content {
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .show-more-comments {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            color: #666;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .show-more-comments:hover {
+            background-color: #e0e0e0;
+        }
+        /* 主演显示样式 */
+        
+        .cast-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .cast-item {
+            display: inline-block;
+        }
+        
+        .cast-more {
+            color: #37a;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        /* 同类型电影推荐样式 */
+        
+        .similar-movies-section {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            grid-column: 1 / -1;
+        }
+        
+        .similar-movies-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        
+        .movie-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .movie-poster-container {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .movie-card-poster {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .movie-card-info {
+            padding: 10px;
+        }
+        
+        .movie-card-title {
+            font-size: 14px;
+            margin: 0 0 5px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .movie-card-rating {
+            font-size: 12px;
+            color: #f44336;
+            margin: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .movie-detail {
+                background: white;
+                border-radius: 8px;
+                padding: 30px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                display: grid;
+                grid-template-columns: 300px 1fr;
+                gap: 30px;
+            }
+            .poster-section {
+                flex: 0 0 auto;
+            }
+            .basic-info {
+                grid-template-columns: 1fr;
+            }
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            .movie-poster-container {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+
+</body>
+<div id="app">
+    <div class="movie-detail-page">
+        <div v-if="loading" class="loading-container">
+            <div class="spinner"></div>
+            <p>加载中...</p>
+        </div>
+
+        <div v-else-if="error" class="error-container">
+            <p>{{ error }}</p>
+            <button @click="goBack" class="back-button">返回首页</button>
+            <button @click="retry" class="back-button" style="margin-left: 10px;">重试</button>
+        </div>
+
+        <div v-else-if="movie" class="movie-detail">
+            <div class="poster-section">
+                <img :src="getImagePath(movie['本地图片路径'])" :alt="movie['电影标题']" class="movie-poster" @error="handleImageError">
+            </div>
+
+            <div class="info-section">
+                <h1 class="movie-title">{{ movie['电影标题'] }}</h1>
+                <div class="rating">
+                    评分：<span>{{ generateRating(movie['电影标题']) }}</span>
+                </div>
+
+                <div class="basic-info">
+                    <div class="info-item">
+                        <span class="info-label">导演：</span>
+                        <span>{{ movie['导演'] }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">类型：</span>
+                        <span>{{ movie['类型'] }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">地区：</span>
+                        <span>{{ movie['地区'] }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">语言：</span>
+                        <span>{{ movie['语言'] }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">上映时间：</span>
+                        <span>{{ movie['上映时间'] }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">片长：</span>
+                        <span>{{ movie['片长'] }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">主演：</span>
+                        <span>
+                                <div class="cast-container">
+                                    <template v-for="(actor, index) in displayedActors" :key="index">
+                                        <span class="cast-item">{{ actor }}</span>
+                        <span v-if="index < displayedActors.length - 1"> / </span>
+                        </template>
+                        <span v-if="actors.length > 3" class="cast-more" @click="toggleCastDisplay">
+                                        {{ showAllActors ? '收起' : '更多' }}
+                                    </span>
+                    </div>
+                    </span>
+                </div>
+            </div>
+
+            <div class="plot-section">
+                <h2>剧情简介</h2>
+                <p class="plot-text">{{ movie['剧情简介'] }}</p>
+            </div>
+
+            <!-- 评论区域 -->
+            <div class="comments-section">
+                <h2>用户评论</h2>
+                <ul class="comment-list">
+                    <li v-for="comment in displayedComments" :key="comment['comment_id']" class="comment-item">
+                        <div class="comment-header">
+                            <span class="comment-user">{{ getUserName(comment['user_id']) }}</span>
+                            <span class="comment-time">{{ formatDate(comment['comment_time']) }}</span>
+                        </div>
+                        <div class="comment-rating">
+                            <template v-for="n in parseInt(comment['rating'] || 0)" :key="'star-full-' + n">★</template>
+                            <template v-for="n in (5 - parseInt(comment['rating'] || 0))" :key="'star-empty-' + n">☆</template> ({{ comment['rating'] || 0 }}分)
+                        </div>
+                        <div class="comment-content">{{ comment['comment_content'] || '' }}</div>
+                    </li>
+                </ul>
+                <button v-if="filteredComments.length > visibleCommentCount" @click="showMoreComments" class="show-more-comments">
+                            查看更多评论
+                        </button>
+            </div>
+
+            <!-- 同类型电影推荐 -->
+            <div v-if="similarMovies.length > 0" class="similar-movies-section">
+                <h2>同类型电影推荐</h2>
+                <div class="movies-grid">
+                    <div v-for="similarMovie in similarMovies" :key="similarMovie['电影编号']" class="movie-card" @click="goToMovieDetail(similarMovie['电影编号'])">
+                        <div class="movie-poster-container">
+                            <img :src="getImagePath(similarMovie['本地图片路径'])" :alt="similarMovie['电影标题']" class="movie-card-poster" @error="handleSimilarMovieImageError" />
+                        </div>
+                        <div class="movie-card-info">
+                            <h3 class="movie-card-title">{{ similarMovie['电影标题'] }}</h3>
+                            <p class="movie-card-rating">评分：{{ generateRating(similarMovie['电影标题']) }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div v-else class="error-container">
+        <p>未找到该电影信息</p>
+        <button @click="goBack" class="back-button">返回首页</button>
+    </div>
+
+    <div class="back-button-container">
+        <button @click="goBack" class="back-button">返回首页</button>
+    </div>
+</div>
+</div>
+<script>
+    const {
+        createApp
+    } = Vue;
+
+    createApp({
+        data() {
+            return {
+                movie: null,
+                comments: [],
+                users: [],
+                allMovies: [], // 存储所有电影数据用于推荐
+                loading: true,
+                error: null,
+                visibleCommentCount: 3,
+                showAllActors: false
+            }
+        },
+
+        computed: {
+            filteredComments() {
+                if (!this.movie) return [];
+                return this.comments
+                    .filter(comment => comment['movie_id'] == this.movie['电影编号'])
+                    .sort((a, b) => new Date(b['comment_time']) - new Date(a['comment_time']));
+            },
+
+            displayedComments() {
+                return this.filteredComments.slice(0, this.visibleCommentCount);
+            },
+
+            // 处理主演显示
+            actors() {
+                if (!this.movie || !this.movie['主演']) return [];
+                return this.movie['主演'].split('/').map(actor => actor.trim()).filter(actor => actor);
+            },
+
+            displayedActors() {
+                if (this.showAllActors || this.actors.length <= 3) {
+                    return this.actors;
+                }
+                return this.actors.slice(0, 3);
+            },
+
+            // 同类型电影推荐
+            similarMovies() {
+                if (!this.movie || !this.allMovies.length) return [];
+
+                // 获取当前电影的类型
+                const currentGenres = this.movie['类型'].split('/').map(g => g.trim());
+
+                // 查找同类型的电影（排除当前电影本身）
+                const similar = this.allMovies.filter(m => {
+                    // 排除当前电影
+                    if (m['电影编号'] === this.movie['电影编号']) return false;
+
+                    // 检查是否有共同类型
+                    const movieGenres = m['类型'].split('/').map(g => g.trim());
+                    return currentGenres.some(genre => movieGenres.includes(genre));
+                });
+
+                // 随机选取最多6部电影
+                return this.shuffleArray(similar).slice(0, 6);
+            }
+        },
+
+        mounted() {
+            // 从URL参数获取电影ID
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieId = urlParams.get('id');
+
+            if (movieId) {
+                this.loadMovieDetail(movieId);
+            } else {
+                this.loading = false;
+                this.error = "缺少电影ID";
+            }
+        },
+
+        methods: {
+            async loadMovieDetail(movieId) {
+                this.loading = true;
+                this.error = null;
+
+                try {
+                    // 并行加载电影、评论和用户数据
+                    const [movieResponse, commentsResponse, usersResponse, allMoviesResponse] = await Promise.all([
+                        fetch('/movie_info.csv'),
+                        fetch('/backend/data/comment.csv'),
+                        fetch('/backend/data/user.csv'),
+                        fetch('/movie_info.csv') // 再次获取所有电影数据用于推荐
+                    ]);
+
+                    const movieText = await movieResponse.text();
+                    const commentsText = await commentsResponse.text();
+                    const usersText = await usersResponse.text();
+                    const allMoviesText = await allMoviesResponse.text();
+
+                    // 解析所有电影数据
+                    this.allMovies = this.parseAllMoviesCSV(allMoviesText);
+
+                    // 解析电影数据
+                    this.movie = this.findMovieInCSV(movieText, movieId);
+
+                    // 解析评论数据
+                    this.comments = this.parseCommentsCSV(commentsText);
+
+                    // 解析用户数据
+                    this.users = this.parseUsersCSV(usersText);
+
+                    if (!this.movie) {
+                        this.error = `未找到ID为 "${movieId}" 的电影`;
+                    }
+                } catch (error) {
+                    console.error('加载电影详情失败:', error);
+                    this.error = `加载失败: ${error.message}`;
+                } finally {
+                    this.loading = false;
+                }
+            },
+
+            parseAllMoviesCSV(csvText) {
+                // 移除可能的BOM标记
+                if (csvText.charCodeAt(0) === 0xFEFF) {
+                    csvText = csvText.slice(1);
+                }
+
+                const lines = this.splitCSVLines(csvText);
+                if (lines.length <= 1) return [];
+
+                // 解析标题行
+                const headers = this.parseCSVLine(lines[0]).map(h => h.trim());
+
+                // 解析数据行
+                const movies = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line === '') continue;
+
+                    try {
+                        const values = this.parseCSVLine(line).map(v => v.trim());
+                        if (values.length !== headers.length) continue;
+
+                        const movie = {};
+                        headers.forEach((header, index) => {
+                            movie[header] = values[index] || '';
+                        });
+
+                        movies.push(movie);
+                    } catch (e) {
+                        console.log(`解析电影第${i+1}行时出错:`, e);
+                    }
+                }
+
+                return movies;
+            },
+
+            findMovieInCSV(csvText, targetId) {
+                // 移除可能的BOM标记
+                if (csvText.charCodeAt(0) === 0xFEFF) {
+                    csvText = csvText.slice(1);
+                }
+
+                const lines = this.splitCSVLines(csvText);
+                if (lines.length <= 1) return null;
+
+                // 解析标题行
+                const headers = this.parseCSVLine(lines[0]).map(h => h.trim());
+
+                // 查找目标电影
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (line.trim() === '') continue;
+
+                    try {
+                        const values = this.parseCSVLine(line).map(v => v.trim());
+
+                        if (values.length !== headers.length) continue;
+
+                        // 检查ID是否匹配 (确保都是字符串类型进行比较)
+                        const movieId = values[0];
+                        const searchId = targetId.toString();
+
+                        if (movieId === searchId) {
+                            const movie = {};
+                            headers.forEach((header, index) => {
+                                movie[header] = values[index] || '';
+                            });
+                            return movie;
+                        }
+                    } catch (e) {
+                        console.log(`解析第${i+1}行时出错:`, e);
+                    }
+                }
+
+                return null;
+            },
+
+            parseCommentsCSV(csvText) {
+                // 移除可能的BOM标记
+                if (csvText.charCodeAt(0) === 0xFEFF) {
+                    csvText = csvText.slice(1);
+                }
+
+                const lines = this.splitCSVLines(csvText);
+                if (lines.length <= 1) return [];
+
+                // 解析标题行
+                const headers = this.parseCSVLine(lines[0]);
+
+                // 解析数据行
+                const comments = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line === '') continue;
+
+                    try {
+                        const values = this.parseCSVLine(line);
+                        if (values.length !== headers.length) continue;
+
+                        const comment = {};
+                        // 正确映射字段名和值
+                        headers.forEach((header, index) => {
+                            // 移除可能的BOM标记和空格
+                            const cleanHeader = header.replace(/^\uFEFF/, '').trim();
+                            const value = values[index] ? values[index].toString().trim() : '';
+
+                            // 对特定字段进行处理
+                            if (cleanHeader === 'rating') {
+                                comment[cleanHeader] = parseInt(value) || 0;
+                            } else if (['movie_id', 'user_id', 'comment_id'].includes(cleanHeader)) {
+                                comment[cleanHeader] = value;
+                            } else {
+                                comment[cleanHeader] = value;
+                            }
+                        });
+
+                        comments.push(comment);
+                    } catch (e) {
+                        console.log(`解析评论第${i+1}行时出错:`, e);
+                    }
+                }
+
+                return comments;
+            },
+
+            parseUsersCSV(csvText) {
+                // 移除可能的BOM标记
+                if (csvText.charCodeAt(0) === 0xFEFF) {
+                    csvText = csvText.slice(1);
+                }
+
+                const lines = this.splitCSVLines(csvText);
+                if (lines.length <= 1) return [];
+
+                // 解析标题行
+                const headers = this.parseCSVLine(lines[0]).map(h => h.trim());
+
+                // 解析数据行
+                const users = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line === '') continue;
+
+                    try {
+                        const values = this.parseCSVLine(line).map(v => v.trim());
+                        if (values.length !== headers.length) continue;
+
+                        const user = {};
+                        headers.forEach((header, index) => {
+                            user[header] = values[index] || '';
+                        });
+
+                        users.push(user);
+                    } catch (e) {
+                        console.log(`解析用户第${i+1}行时出错:`, e);
+                    }
+                }
+
+                return users;
+            },
+
+            parseCSVLine(line) {
+                const result = [];
+                let current = '';
+                let inQuotes = false;
+
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+
+                    if (char === '"') {
+                        // 检查是否是转义的引号
+                        if (i + 1 < line.length && line[i + 1] === '"') {
+                            current += '"';
+                            i++; // 跳过下一个引号
+                        } else {
+                            inQuotes = !inQuotes;
+                        }
+                    } else if (char === ',' && !inQuotes) {
+                        result.push(current);
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+
+                result.push(current);
+                // 不再自动 trim，保留原始数据并在需要时手动处理
+                return result;
+            },
+
+            splitCSVLines(text) {
+                const lines = [];
+                let currentLine = '';
+                let inQuotes = false;
+
+                for (let i = 0; i < text.length; i++) {
+                    const char = text[i];
+
+                    if (char === '"') {
+                        // 检查是否是转义的引号
+                        if (i + 1 < text.length && text[i + 1] === '"') {
+                            currentLine += '""';
+                            i++; // 跳过下一个引号
+                            continue;
+                        } else {
+                            inQuotes = !inQuotes;
+                        }
+                    } else if (char === '\n' && !inQuotes) {
+                        lines.push(currentLine);
+                        currentLine = '';
+                        continue;
+                    }
+
+                    currentLine += char;
+                }
+
+                // 添加最后一行（如果没有以换行符结尾）
+                if (currentLine) {
+                    lines.push(currentLine);
+                }
+
+                return lines;
+            },
+
+            getImagePath(imagePath) {
+                if (imagePath && typeof imagePath === 'string') {
+                    // 移除可能的BOM标记
+                    if (imagePath.charCodeAt(0) === 65279) {
+                        imagePath = imagePath.substring(1);
+                    }
+
+                    // 清理路径，移除多余的引号
+                    imagePath = imagePath.replace(/(^["'])|(["']$)/g, '');
+
+                    // 确保路径正确
+                    if (imagePath.startsWith('img/')) {
+                        return `/${imagePath}`;
+                    } else if (!imagePath.startsWith('/')) {
+                        return `/img/${imagePath}`;
+                    }
+                    return imagePath;
+                }
+                return '/img/default_movie.jpg'; // 默认图片路径
+            },
+
+            handleImageError(event) {
+                // 图片加载失败时使用默认图片
+                event.target.src = '/img/default_movie.jpg';
+            },
+
+            handleSimilarMovieImageError(event) {
+                // 同类型电影图片加载失败时使用默认图片
+                event.target.src = '/img/default_movie.jpg';
+            },
+
+            generateRating(movieTitle) {
+                // 根据电影信息生成评分（模拟数据）
+                const specialMovies = [
+                    "入殓师 おくりびと", "致命魔术 The Prestige", "死亡诗社 Dead Poets Society",
+                    "被嫌弃的松子的一生 嫌われ松子の一生", "教父2 The Godfather: Part II"
+                ];
+
+                if (specialMovies.includes(movieTitle)) {
+                    return (8.5 + Math.random() * 1.4).toFixed(1);
+                }
+                return (7.0 + Math.random() * 2.9).toFixed(1);
+            },
+
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.getFullYear() + '-' +
+                    String(date.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(date.getDate()).padStart(2, '0') + ' ' +
+                    String(date.getHours()).padStart(2, '0') + ':' +
+                    String(date.getMinutes()).padStart(2, '0');
+            },
+
+            showMoreComments() {
+                this.visibleCommentCount += 10;
+            },
+
+            goBack() {
+                window.location.href = '/';
+            },
+
+            // 跳转到电影详情页
+            goToMovieDetail(movieId) {
+                window.location.href = `/movie-detail.html?id=${movieId}`;
+            },
+
+            retry() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const movieId = urlParams.get('id');
+                if (movieId) {
+                    this.loadMovieDetail(movieId);
+                }
+            },
+
+            // 切换主演显示状态
+            toggleCastDisplay() {
+                this.showAllActors = !this.showAllActors;
+            },
+
+            // 获取用户名
+            getUserName(userId) {
+                if (!userId) return '未知用户';
+
+                const user = this.users.find(u => u['user_id'] == userId);
+                return user ? user['username'] : `用户${userId}`;
+            },
+
+            // 数组随机排序函数
+            shuffleArray(array) {
+                const newArray = [...array];
+                for (let i = newArray.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+                }
+                return newArray;
+            }
+        }
+    }).mount('#app');
+</script>
+</body>
+
+</html>
