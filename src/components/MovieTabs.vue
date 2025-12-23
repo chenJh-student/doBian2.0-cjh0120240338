@@ -292,7 +292,7 @@ export default {
     },
     
     goToMovieDetail(movieId) {
-      window.location.href = `/movie-detail.html?id=${movieId}`;
+      window.location.href = `/doBian2.0-cjh0120240338/movie-detail.html?id=${movieId}`;
     },
     
     // 最新电影分页
