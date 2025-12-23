@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/doBian2.0-cjh0120240338/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>豆瓣电影</title>
+  <script type="module" crossorigin src="/doBian2.0-cjh0120240338/assets/main-DyYF-h2v.js"></script>
+  <link rel="stylesheet" crossorigin href="/doBian2.0-cjh0120240338/assets/main-CZKp-lwD.css">
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+
+</html>
+<script>
+    async function testCSV() {
+        try {
+            const response = await fetch('/movie_info.csv');
+            const csvText = await response.text();
+            const lines = csvText.split('\n');
+            document.getElementById('csv-output').innerHTML = `
+          <p>CSV 文件读取成功</p>
+          <p>总行数: ${lines.length}</p>
+          <p>标题行: ${lines[0]}</p>
+          <p>第二行: ${lines[1] || '无数据'}</p>
+        `;
+        } catch (error) {
+            document.getElementById('csv-output').innerHTML = `<p>读取失败: ${error.message}</p>`;
+        }
+    }
+</script>
