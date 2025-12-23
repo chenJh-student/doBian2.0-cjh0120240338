@@ -5,6 +5,15 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
     plugins: [vue()],
     base: '/doBian2.0-cjh0120240338/', // GitHub Pages仓库名
+    build: {
+        rollupOptions: {
+            input: {
+                main: 'index.html',
+                movieDetail: 'movie-detail.html',
+                userInfo: 'user_info.html'
+            }
+        }
+    },
     server: {
         port: 3000,
         proxy: {
