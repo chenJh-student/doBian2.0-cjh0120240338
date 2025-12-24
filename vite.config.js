@@ -26,6 +26,6 @@ export default defineConfig({
     server: {
         port: 3000
     },
-    // GitHub Pages 配置 - 根路径部署
-    base: '/'
+    // GitHub Pages 配置 - 仓库名路径
+    base: '/doBian2.0-cjh0120240338/'
 })
