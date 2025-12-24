@@ -3,11 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="/doBian2.0-cjh0120240338/favicon.ico">
+    <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>豆瓣电影</title>
-  <script type="module" crossorigin src="/doBian2.0-cjh0120240338/assets/main-DyYF-h2v.js"></script>
-  <link rel="stylesheet" crossorigin href="/doBian2.0-cjh0120240338/assets/main-CZKp-lwD.css">
+  <script type="module" crossorigin src="/assets/index-Ciz8_ZW5.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CZKp-lwD.css">
 </head>
 
 <body>
@@ -18,7 +18,7 @@
 <script>
     async function testCSV() {
         try {
-            const response = await fetch('/doBian2.0-cjh0120240338/movie_info.csv');
+            const response = await fetch('/movie_info.csv');
             const csvText = await response.text();
             const lines = csvText.split('\n');
             document.getElementById('csv-output').innerHTML = `
