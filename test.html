@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试页面</title>
+</head>
+<body>
+    <h1>GitHub Pages 路径测试</h1>
+    <p>当前页面路径: <script>document.write(window.location.pathname)</script></p>
+    
+    <h2>资源测试</h2>
+    <link rel="stylesheet" href="/assets/index-CZKp-lwD.css">
+    <script src="/assets/index-Ciz8_ZW5.js"></script>
+    
+    <h2>图片测试</h2>
+    <img src="/img/1_入殓师 おくりびと.jpg" alt="测试图片" style="width: 100px;">
+    
+    <h2>CSV 测试</h2>
+    <button onclick="testCSV()">测试 CSV</button>
+    <div id="result"></div>
+    
+    <script>
+        async function testCSV() {
+            try {
+                const response = await fetch('/movie_info.csv');
+                const text = await response.text();
+                document.getElementById('result').innerHTML = `<p style="color: green;">✅ CSV 加载成功! 行数: ${text.split('\n').length}</p>`;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p style="color: red;">❌ CSV 加载失败: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
