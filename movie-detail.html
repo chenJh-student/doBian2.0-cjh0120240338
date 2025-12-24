@@ -416,18 +416,6 @@
 </div>
 </div>
 <script>
-    // 基础路径工具
-    function getBasePath() {
-        // GitHub Pages 通常部署到根路径
-        if (window.location.hostname.includes('github.io')) {
-            return '/'; // GitHub Pages 根路径
-        }
-        // 本地开发环境
-        return '/';
-    }
-
-    const BASE_PATH = getBasePath();
-
     const {
         createApp
     } = Vue;
@@ -514,10 +502,10 @@
                 try {
                     // 并行加载电影、评论和用户数据
                     const [movieResponse, commentsResponse, usersResponse, allMoviesResponse] = await Promise.all([
-                        fetch(`${BASE_PATH}data/movie_info.csv`),
-                        fetch(`${BASE_PATH}data/comment.csv`),
-                        fetch(`${BASE_PATH}data/user.csv`),
-                        fetch(`${BASE_PATH}data/movie_info.csv`) // 再次获取所有电影数据用于推荐
+                        fetch(`/movie_info.csv`),
+                        fetch(`/comment.csv`),
+                        fetch(`/user.csv`),
+                        fetch(`/movie_info.csv`) // 再次获取所有电影数据用于推荐
                     ]);
 
                     const movieText = await movieResponse.text();
@@ -782,15 +770,17 @@
                     // 清理路径，移除多余的引号
                     imagePath = imagePath.replace(/(^["'])|(["']$)/g, '');
 
-                    // 确保路径正确
+                    // 确保路径正确（GitHub Pages 根路径）
                     if (imagePath.startsWith('img/')) {
-                        return `${BASE_PATH}${imagePath}`;
+                        return `/${imagePath}`;
                     } else if (!imagePath.startsWith('/')) {
-                        return `${BASE_PATH}img/${imagePath}`;
+                        return `/img/${imagePath}`;
+                    } else if (imagePath.startsWith('/')) {
+                        return `${imagePath}`;
                     }
-                    return imagePath;
+                    return `/${imagePath}`;
                 }
-                return `${BASE_PATH}img/default_movie.jpg`; // 默认图片路径
+                return '/img/default_movie.jpg'; // 默认图片路径
             },
 
             handleImageError(event) {
@@ -830,12 +820,12 @@
             },
 
             goBack() {
-                window.location.href = `${BASE_PATH}`;
+                window.location.href = '/';
             },
 
             // 跳转到电影详情页
             goToMovieDetail(movieId) {
-                window.location.href = `${BASE_PATH}movie-detail.html?id=${movieId}`;
+                window.location.href = `/movie-detail.html?id=${movieId}`;
             },
 
             retry() {
