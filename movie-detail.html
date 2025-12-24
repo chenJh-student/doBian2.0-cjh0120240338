@@ -501,11 +501,12 @@
 
                 try {
                     // 并行加载电影、评论和用户数据
+                    const basePath = '/doBian2.0-cjh0120240338';
                     const [movieResponse, commentsResponse, usersResponse, allMoviesResponse] = await Promise.all([
-                        fetch(`/movie_info.csv`),
-                        fetch(`/comment.csv`),
-                        fetch(`/user.csv`),
-                        fetch(`/movie_info.csv`) // 再次获取所有电影数据用于推荐
+                        fetch(`${basePath}/movie_info.csv`),
+                        fetch(`${basePath}/comment.csv`),
+                        fetch(`${basePath}/user.csv`),
+                        fetch(`${basePath}/movie_info.csv`) // 再次获取所有电影数据用于推荐
                     ]);
 
                     const movieText = await movieResponse.text();
@@ -770,27 +771,28 @@
                     // 清理路径，移除多余的引号
                     imagePath = imagePath.replace(/(^["'])|(["']$)/g, '');
 
-                    // 确保路径正确（GitHub Pages 根路径）
+                    // 确保路径正确（GitHub Pages 需要完整路径）
+                    const basePath = '/doBian2.0-cjh0120240338';
                     if (imagePath.startsWith('img/')) {
-                        return `/${imagePath}`;
+                        return `${basePath}/${imagePath}`;
                     } else if (!imagePath.startsWith('/')) {
-                        return `/img/${imagePath}`;
+                        return `${basePath}/img/${imagePath}`;
                     } else if (imagePath.startsWith('/')) {
-                        return `${imagePath}`;
+                        return `${basePath}${imagePath}`;
                     }
-                    return `/${imagePath}`;
+                    return `${basePath}/${imagePath}`;
                 }
-                return '/img/default_movie.jpg'; // 默认图片路径
+                return '/doBian2.0-cjh0120240338/img/default_movie.jpg'; // 默认图片路径
             },
 
             handleImageError(event) {
                 // 图片加载失败时使用默认图片
-                event.target.src = '/img/default_movie.jpg';
+                event.target.src = '/doBian2.0-cjh0120240338/img/default_movie.jpg';
             },
 
             handleSimilarMovieImageError(event) {
                 // 同类型电影图片加载失败时使用默认图片
-                event.target.src = '/img/default_movie.jpg';
+                event.target.src = '/doBian2.0-cjh0120240338/img/default_movie.jpg';
             },
 
             generateRating(movieTitle) {
@@ -820,12 +822,12 @@
             },
 
             goBack() {
-                window.location.href = '/';
+                window.location.href = '/doBian2.0-cjh0120240338/';
             },
 
             // 跳转到电影详情页
             goToMovieDetail(movieId) {
-                window.location.href = `/movie-detail.html?id=${movieId}`;
+                window.location.href = `/doBian2.0-cjh0120240338/movie-detail.html?id=${movieId}`;
             },
 
             retry() {
