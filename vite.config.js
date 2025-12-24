@@ -6,21 +6,10 @@ import { resolve } from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
-        vue(),
-        {
-            name: 'copy-static-files',
-            closeBundle() {
-                // 复制根目录的 HTML 文件到构建输出
-                copyFileSync('movie-detail.html', 'dist/movie-detail.html')
-                copyFileSync('user_info.html', 'dist/user_info.html')
-                copyFileSync('index.html', 'dist/index.html')
-                
-                console.log('Static files copied to dist!')
-            }
-        }
+        vue()
     ],
     build: {
-        outDir: 'dist',
+        outDir: 'docs',
         assetsDir: 'assets'
     },
     server: {
